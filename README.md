@@ -1,0 +1,2 @@
+# GitHubhosts
+快捷修改或创建hosts中github的hosts
