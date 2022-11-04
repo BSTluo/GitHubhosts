@@ -1,5 +1,5 @@
 # GitHubhosts
-快捷修改或创建hosts中github的hosts
+快捷修改或创建hosts中github的hosts(不会动原有的内容
 
 ***
 ## 使用方式
