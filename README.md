@@ -4,4 +4,4 @@
 ***
 ## 使用方式
 
-使用node运行`index.js`即可，记得要管理员哦
+使用node运行`GitHubHostChange.js`即可，记得要管理员哦
