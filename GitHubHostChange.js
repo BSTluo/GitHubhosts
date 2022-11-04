@@ -15,8 +15,10 @@ const config = [
 ]
 
 // 更新github的ip
-const changeIp = async(host) => {
-  const a = await getHostIp(host)
+const changeIp = async (host) => {
+  let a
+  try { a = await getHostIp(host) } catch (err) { return err }
+
 
   let data = hosts.split('\n')
   for (let i = 0; i < data.length; i++) {
@@ -27,17 +29,23 @@ const changeIp = async(host) => {
     }
   }
 
+  console.log(`域名： ${host}  更新为  ${a}`)
   return data.join('\n')
 }
 
 // 新建github的ip
 const newIp = async (host) => {
-  const a = await getHostIp(host)
+  let a
+  try { a = await getHostIp(host) } catch (err) {
+    return err
+  }
+
 
   let data = hosts.split('\n')
 
   data.push(`${a} ${host}`)
 
+  console.log(`域名： ${host}  更新为  ${a}`)
   return data.join('\n')
 }
 
@@ -55,13 +63,14 @@ const getHostIp = (url) => {
         html += data
       })
       res.on('end', function () {
-        console.log(html)
-        console.log(html.match(reg)[1])
+        if (!html.match(reg)) {
+          return reject(' [403] www.ipaddress.com')
+        }
         const out = html.match(reg)[1].match(regHost)[1]
         resolve(out)
       })
     }).on('error', function (err) {
-      reject(err)
+      return reject('未知错误')
     })
   })
 }
@@ -70,13 +79,24 @@ const start = () => {
   config.forEach(async element => {
 
     if (hosts.includes(element)) {
-      hosts = await changeIp(element)
+      const hostCache = await changeIp(element)
+
+      if (hostCache !== ' [403] www.ipaddress.com' && hostCache !== '未知错误') {
+        hosts = hostCache
+      } else { console.log(`域名： ${element}  更新失败  ---> ${hostCache}`) }
+
     } else {
-      hosts = await newIp(element)
+      const hostCache = await newIp(element)
+
+      if (hostCache !== ' [403] www.ipaddress.com' && hostCache !== '未知错误') {
+        hosts = hostCache
+      } else { console.log(`域名： ${element}  更新失败  ---> ${hostCache}`) }
     }
 
     fs.writeFileSync(filePath, hosts)
   })
+
+  console.log('\n\n经常更新失败的话，请尝试一下手动更新，或手动进ipaddress.com\n\n')
 }
 
 start()
