@@ -8,10 +8,10 @@ let hosts = fs.readFileSync(filePath, 'utf-8')
 
 const config = [
   'github.com',
-//  'www.github.com',
-//  'codeload.github.com',
-//  'github.global.ssl.fastly.net',
-//  'gits.github.com'
+  'www.github.com',
+  'codeload.github.com',
+  'github.global.ssl.fastly.net',
+  'gits.github.com'
 ]
 
 // 更新github的ip
