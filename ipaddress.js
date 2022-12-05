@@ -3,7 +3,8 @@ const path = require('path')
 const https = require('https');
 
 const filePath = 'C:/Windows/System32/drivers/etc/HOSTS' // hosts路径
-// const filePath = './HOSTS'
+//const filePath = './HOSTS' 不放心的话可以将HOSTS文件复制一份然后用此工具修改
+
 let hosts = fs.readFileSync(filePath, 'utf-8')
 
 const config = [
@@ -50,7 +51,7 @@ const newIp = async (host) => {
 }
 
 // 匹配元素
-const reg = /<ul class="comma-separated">([\s\S]+?)<\/ul>/
+const reg = /<tr><td>A<\/td><td><a href="[\s\S]+?">([\s\S]+?)<\/a><\/td><\/tr>/
 const regHost = /<li>([\s\S]+?)<\/li>/
 
 
@@ -66,7 +67,7 @@ const getHostIp = (url) => {
         if (!html.match(reg)) {
           return reject(' [403] www.ipaddress.com')
         }
-        const out = html.match(reg)[1].match(regHost)[1]
+        const out = html.match(reg)[1]
         resolve(out)
       })
     }).on('error', function (err) {
